@@ -25,10 +25,11 @@
     "@types/node": "^11.13.17",
     "ts-node-dev": "^1.0.0-pre.40",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "jimp": "^0.6.8"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "jimp": "^0.6.4"
+    "jimp": "^0.6.8"
   }
 }

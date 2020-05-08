@@ -30,6 +30,23 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
+
+ app.get("/filteredimage", async (req, res) => {
+       const { image_url} = req.query;
+       if(!image_url){
+         res.status(404).send("please provide image_url");
+       }
+       try{
+         const file = await filterImageFromURL(image_url).catch((err) => {
+           res.status(500).send("Image can't be processed");
+         });
+         res.status(200).sendFile(file);
+         deleteLocalFiles(image_url);
+       }catch(err) {
+         res.status(500).send("Error processing the image");
+       }
+
+ });
   
   // Root Endpoint
   // Displays a simple message to the user
