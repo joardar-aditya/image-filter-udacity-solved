@@ -1,5 +1,5 @@
 import fs from 'fs';
-import Jimp = require('jimp');
+import Jimp from 'jimp';
 import { reject } from 'bluebird';
 
 // filterImageFromURL
@@ -11,19 +11,21 @@ import { reject } from 'bluebird';
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string>{
     return new Promise( async (resolve, reject) => {
-        let photo;
-        try{
-        photo = await Jimp.read(inputURL);}catch (err) {
-            return reject(err); 
-        }
-        const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
-        await photo
-        .resize(256, 256) // resize
-        .quality(60) // set JPEG quality
-        .greyscale() // set greyscale
-        .write(__dirname+outpath, (img)=>{
-            resolve(__dirname+outpath);
+        
+        const photo = Jimp.read(inputURL)
+        .then(lenna => {
+          return lenna
+            .resize(256, 256) // resize
+            .quality(60) // set JPEG quality
+            .greyscale() // set greyscale
+            .write(__dirname +'current.jpg', () => {
+                resolve(__dirname +'current.jpg')
+            }); // save
+        })
+        .catch(err => {
+          console.error(err);
         });
+        
     });
 }
 
@@ -34,6 +36,12 @@ export async function filterImageFromURL(inputURL: string): Promise<string>{
 //    files: Array<string> an array of absolute paths to files
 export async function deleteLocalFiles(files:Array<string>){
     for( let file of files) {
-        fs.unlinkSync(file);
+        fs.unlink(file, (err) => {
+            if (err) {
+                console.log("failed to delete local image:"+err);
+            } else {
+                console.log('successfully deleted local image');                                
+            }
+    });
     }
 }
