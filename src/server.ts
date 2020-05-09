@@ -32,7 +32,7 @@ import { nextTick } from 'process';
 
   //! END @TODO1
 
- app.get("/filteredimage", async (req, res) => {
+ app.get("/filteredimage", async (req:Request, res:Response) => {
        const { image_url} = JSON.parse(JSON.stringify(req.query));
        if(!image_url){
          res.status(404).send("please provide image_url");
